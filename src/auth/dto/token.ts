@@ -1,3 +1,3 @@
 export class Token {
-  constructor(public readonly value) {}
+  constructor(public readonly token) {}
 }

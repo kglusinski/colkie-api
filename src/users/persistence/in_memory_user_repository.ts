@@ -9,7 +9,12 @@ export type Predicate = { id: string } | { username: string };
 @Injectable()
 export class InMemoryUserRepository implements UsersRepository {
   private database: User[] = [
-    { id: 'asd', username: 'lorem@ipsum.com', role: 'USER', hash: '' },
+    {
+      id: 'asd',
+      username: 'lorem@ipsum.com',
+      role: 'USER',
+      hash: '$argon2id$v=19$m=65536,t=3,p=4$/j0/y9Ii2y0zYh0VfARIdg$1XRs+Z7gMt++Xp4/j6kD2LfBhj42MdQTlV9ECN5J2KE',
+    },
   ];
 
   findOne(cond: Predicate): Result<User, UserNotFound> {

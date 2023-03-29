@@ -6,8 +6,8 @@ import { GetToken } from '../service/get_token.service';
 export class AuthController {
   constructor(private getTokenService: GetToken) {}
   @Post()
-  getToken(@Body() reqBody: Credentials) {
-    const res = this.getTokenService.getToken(reqBody);
+  async getToken(@Body() reqBody: Credentials) {
+    const res = await this.getTokenService.getToken(reqBody);
 
     switch (res.result) {
       case 'success':
