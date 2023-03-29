@@ -1,0 +1,167 @@
+openapi: 3.0.3
+info:
+  title: Colkie API
+  description: Colkie is the place where you can join your favorite artist community.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000'
+    description: development server
+paths:
+  /v1/token:
+    post:
+      operationId: sign_in
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: token has been returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+
+  /v1/rooms:
+    post:
+      summary: Create a new room
+      operationId: create_room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '201':
+          description: Room created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/room"
+  /v1/rooms/{room_id}/users:
+    post:
+      summary: Add a user to a room
+      operationId: join_room
+      parameters:
+        - in: path
+          name: room_id
+          schema:
+            type: string
+          required: true
+          description: ID of the room to add the user
+      responses:
+        '201':
+          description: User added to the room successfully
+  /v1/rooms/{room_id}/messages:
+    post:
+      summary: Send a message to a room
+      operationId: post_message
+      parameters:
+        - in: path
+          name: room_id
+          schema:
+            type: string
+          required: true
+          description: ID of the room to send the message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+      responses:
+        '204':
+          description: Message sent successfully
+
+    get:
+      summary: Get latest messages from a room
+      operationId: fetch_messages
+      parameters:
+        - in: path
+          name: room_id
+          schema:
+            type: string
+          required: true
+          description: ID of the room to get messages
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: "Number of latest messages to fetch (default: 20)"
+      responses:
+        '200':
+          description: Latest messages fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  messages:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/message"
+components:
+  schemas:
+    room:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        artist_id:
+          type: string
+          format: uuid
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/user"
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: ["USER", "ARTIST"]
+        email:
+          type: string
+    message:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        content:
+          type: string
+        author_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+
