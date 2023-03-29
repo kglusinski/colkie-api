@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: public.ecr.aws/docker/library/postgres:14.3
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=colkie
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./database/bootstrap.sql:/docker-entrypoint-initdb.d/bootstrap.sql
+    command: [ "postgres", "-c", "log_statement=all" ]
