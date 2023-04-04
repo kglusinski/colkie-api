@@ -17,8 +17,8 @@ export class InMemoryUserRepository implements UsersRepository {
     },
   ];
 
-  findOne(cond: Predicate): Result<User, UserNotFound> {
-    const user = this.database.find((el) => {
+  async findOne(cond: Predicate): Promise<Result<User, UserNotFound>> {
+    const user = await this.database.find((el) => {
       if ('id' in cond) {
         return el.id === cond.id;
       }

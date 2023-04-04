@@ -10,11 +10,13 @@ const UsersRepository = Inject('UsersRepository');
 export class UsersService {
   constructor(@UsersRepository private repository: UsersRepository) {}
 
-  findUser(id: string): Result<User, UserNotFound> {
+  async findUser(id: string): Promise<Result<User, UserNotFound>> {
     return this.repository.findOne({ id });
   }
 
-  findUserByUsername(username: string): Result<User, UserNotFound> {
+  async findUserByUsername(
+    username: string,
+  ): Promise<Result<User, UserNotFound>> {
     return this.repository.findOne({ username: username });
   }
 }

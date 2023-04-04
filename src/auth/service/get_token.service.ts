@@ -19,11 +19,11 @@ export class GetToken {
   async getToken(
     creds: Credentials,
   ): Promise<Result<Token, BadCredentials | UserNotFound>> {
-    const res = this.users.findUserByUsername(creds.username);
+    const res = await this.users.findUserByUsername(creds.username);
     if (res.result == 'success') {
       const user = res.value;
       const isPasswordValid = argon.verify(user.hash, creds.password);
-      if (isPasswordValid && creds.username === user.username) {
+      if (isPasswordValid) {
         return {
           result: 'success',
           value: new Token(this.sign(user.id, user.role)),
