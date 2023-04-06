@@ -33,4 +33,9 @@ export class InMemoryUserRepository implements UsersRepository {
 
     return { result: 'error', error: new UserNotFound('id') };
   }
+
+  save(user: User): Promise<User> {
+    this.database.push(user);
+    return Promise.resolve(user);
+  }
 }

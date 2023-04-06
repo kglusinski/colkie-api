@@ -20,12 +20,34 @@ export class PrismaUserRepository implements UsersRepository {
     });
   }
 
+  save(user: User): Promise<User> {
+    return this.db.user
+      .upsert({
+        where: { id: user.id },
+        update: this.mapToPrismaUser(user),
+        create: this.mapToPrismaUser(user),
+      })
+      .then((user) => this.mapToDomainUser(user));
+  }
+
   private mapToDomainUser(user: PrismaUser): User {
     return {
       id: user.id,
       username: user.username,
       role: user.role,
       hash: user.password,
+    };
+  }
+
+  private mapToPrismaUser(user: User): PrismaUser {
+    return {
+      id: user.id,
+      username: user.username,
+      role: user.role,
+      password: user.hash,
+      createdAt: undefined,
+      updatedAt: undefined,
+      roomId: undefined,
     };
   }
 }

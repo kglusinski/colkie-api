@@ -4,4 +4,5 @@ import { UserNotFound } from '../error/UserNotFound';
 
 export interface UsersRepository {
   findOne(predicates: object): Promise<Result<User, UserNotFound>>;
+  save(user: User): Promise<User>;
 }

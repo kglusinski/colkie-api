@@ -1,4 +1,4 @@
-import { uuid as uuidv4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 export class Room {
   id: string;
@@ -7,9 +7,9 @@ export class Room {
 
   description: string;
 
-  creatorId: uuidv4;
+  creatorId: string;
 
   constructor() {
-    this.id = uuidv4();
+    this.id = uuid();
   }
 }

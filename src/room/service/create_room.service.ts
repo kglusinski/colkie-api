@@ -27,7 +27,7 @@ export class CreateRoomService {
     return this.roomsRepository.save(room);
   }
 
-  private getUserIdFromAccessToken(accessToken: string): number {
+  private getUserIdFromAccessToken(accessToken: string): string {
     try {
       const decodedToken = this.jwtService.verify(accessToken);
       return decodedToken.userId;
