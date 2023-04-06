@@ -24,6 +24,12 @@ export class CreateRoomService {
     room.name = name;
     room.creatorId = user.id;
 
-    return this.roomsRepository.save(room);
+    try {
+      this.roomsRepository.save(room);
+    } catch (e) {
+      console.log(e);
+    }
+
+    return room;
   }
 }
