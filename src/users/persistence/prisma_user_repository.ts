@@ -36,6 +36,9 @@ export class PrismaUserRepository implements UsersRepository {
       username: user.username,
       role: user.role,
       hash: user.password,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      roomId: user.roomId,
     };
   }
 
@@ -45,9 +48,9 @@ export class PrismaUserRepository implements UsersRepository {
       username: user.username,
       role: user.role,
       password: user.hash,
-      createdAt: undefined,
-      updatedAt: undefined,
-      roomId: undefined,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      roomId: user.roomId,
     };
   }
 }

@@ -3,6 +3,9 @@ export class User {
   username: string;
   hash: string;
   role: string;
+  createdAt: Date;
+  updatedAt: Date;
+  roomId?: string;
 
   constructor(id: string, username: string, hash: string, role: string) {
     if (!id || !username || !hash || !role)
@@ -12,5 +15,10 @@ export class User {
     this.username = username;
     this.hash = hash;
     this.role = role;
+
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
+
+    this.roomId = undefined;
   }
 }
