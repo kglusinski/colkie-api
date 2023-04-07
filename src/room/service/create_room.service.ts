@@ -1,15 +1,15 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateRoomDto } from '../dto/room.dto';
 import { Room } from '../domain/room.entity';
 import { RoomsRepository } from '../domain/rooms_repository';
 import { ChatUser } from '../domain/chat_user';
-
-const RoomsRepository = Inject('RoomsRepository');
+import { Message } from '../domain/message';
+import { InjectRoomsRepository } from '../decorator/repository';
 
 @Injectable()
 export class CreateRoomService {
   constructor(
-    @RoomsRepository private readonly roomsRepository: RoomsRepository,
+    @InjectRoomsRepository private readonly roomsRepository: RoomsRepository,
   ) {}
 
   async create(createRoomDto: CreateRoomDto, user: ChatUser): Promise<Room> {
@@ -47,5 +47,19 @@ export class CreateRoomService {
     user.leaveRoom();
 
     return this.roomsRepository.updateUserRoom(user.getId(), null);
+  }
+
+  async postMessage(roomId: string, content: string, chatUser: ChatUser) {
+    const res = await this.roomsRepository.findOne({ id: roomId });
+
+    if (res.result === 'error') {
+      throw new Error('Room not found');
+    }
+    const room = res.value;
+    const message = new Message(content, chatUser);
+
+    room.postMessage(message, chatUser);
+
+    this.roomsRepository.save(room);
   }
 }

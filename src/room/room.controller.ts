@@ -13,6 +13,7 @@ import { CreateRoomService } from './service/create_room.service';
 import { JwtGuard } from '../auth/guard/jwt_guard';
 import { GetUser } from '../auth/decorator/GetUser';
 import { ChatUser } from './domain/chat_user';
+import { MessageDto } from './dto/message.dto';
 
 @UseGuards(JwtGuard)
 @Controller('rooms')
@@ -50,6 +51,17 @@ export class RoomsController {
     }
 
     return null;
+  }
+
+  @Post(':id/messages')
+  postMessage(
+    @Param('id') roomId: string,
+    @Body() message: MessageDto,
+    @GetUser() user: AuthUser,
+  ) {
+    const chatUser = this.mapToChatUser(user);
+
+    return this.roomsService.postMessage(roomId, message.content, chatUser);
   }
 
   private mapToChatUser(user: AuthUser): ChatUser {

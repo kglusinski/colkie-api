@@ -2,13 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RoomsRepository } from '../domain/rooms_repository';
 import { Room } from '../domain/room.entity';
-import { Room as PrismaRoom } from '@prisma/client';
 import { RoomNotFound } from '../error/RoomNotFound';
 import { Result } from '../../common/result';
+import { Message } from '../domain/message';
+import { MessageMapper } from '../mapper/message_mapper';
+import { RoomMapper } from '../mapper/room_mapper';
 
 @Injectable()
 export class PrismaRoomsRepository implements RoomsRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private roomMapper: RoomMapper,
+    private messageMapper: MessageMapper,
+  ) {}
 
   async findOne(predicates: object): Promise<Result<Room, RoomNotFound>> {
     const room = await this.prisma.room.findUnique({
@@ -19,11 +25,14 @@ export class PrismaRoomsRepository implements RoomsRepository {
       return { result: 'error', error: new RoomNotFound('id') };
     }
 
-    return { result: 'success', value: this.toDomainRoom(room) };
+    return {
+      result: 'success',
+      value: await this.roomMapper.PrismaRoomToDomainRoom(room),
+    };
   }
 
   async save(room: Room) {
-    const prismaRoom = this.toPrismaRoom(room);
+    const prismaRoom = await this.roomMapper.DomainRoomToPrismaRoom(room);
 
     await this.prisma.room.upsert({
       where: { id: prismaRoom.id },
@@ -39,23 +48,19 @@ export class PrismaRoomsRepository implements RoomsRepository {
     });
   }
 
-  private toDomainRoom(prismaRoom: PrismaRoom): Room {
-    return {
-      id: prismaRoom.id,
-      name: prismaRoom.name,
-      description: '',
-      creatorId: undefined,
-      createdAt: prismaRoom.createdAt,
-      updatedAt: prismaRoom.updatedAt,
-    };
-  }
+  async findMessagesByRoomId(roomId: string): Promise<Message[]> {
+    const prismaMessages = await this.prisma.message.findMany({
+      where: { roomId: roomId },
+    });
 
-  private toPrismaRoom(room: Room): PrismaRoom {
-    return {
-      id: room.id,
-      name: room.name,
-      createdAt: room.createdAt,
-      updatedAt: room.updatedAt,
-    };
+    const messages = await Promise.all(
+      prismaMessages.map(async (prismaMessage) => {
+        return await this.messageMapper.PrismaMessageToDomainMessage(
+          prismaMessage,
+        );
+      }),
+    );
+
+    return messages;
   }
 }
