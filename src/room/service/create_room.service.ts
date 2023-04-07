@@ -1,15 +1,16 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateRoomDto } from '../dto/room.dto';
 import { Room } from '../domain/room.entity';
 import { RoomsRepository } from '../domain/rooms_repository';
 import { ChatUser } from '../domain/chat_user';
 import { Message } from '../domain/message';
-import { InjectRoomsRepository } from '../decorator/repository';
+
+const RoomsRepository = Inject('RoomsRepository');
 
 @Injectable()
 export class CreateRoomService {
   constructor(
-    @InjectRoomsRepository private readonly roomsRepository: RoomsRepository,
+    @RoomsRepository private readonly roomsRepository: RoomsRepository,
   ) {}
 
   async create(createRoomDto: CreateRoomDto, user: ChatUser): Promise<Room> {

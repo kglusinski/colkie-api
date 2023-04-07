@@ -4,9 +4,8 @@ import { PrismaRoomsRepository } from './persistence/PrismaRoomsRepository';
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaModule } from '../prisma/prisma.module';
 import { RoomsController } from './room.controller';
-import { RoomMapper } from './mapper/room_mapper';
-import { MessageMapper } from './mapper/message_mapper';
 import { UsersModule } from '../users/users.module';
+import { MessageMapper } from './mapper/message_mapper';
 
 @Module({
   imports: [JwtModule, PrismaModule, UsersModule],
@@ -16,7 +15,6 @@ import { UsersModule } from '../users/users.module';
       provide: 'RoomsRepository',
       useClass: PrismaRoomsRepository,
     },
-    RoomMapper,
     MessageMapper,
   ],
   controllers: [RoomsController],

@@ -4,15 +4,15 @@ import { RoomsRepository } from '../domain/rooms_repository';
 import { Room } from '../domain/room.entity';
 import { RoomNotFound } from '../error/RoomNotFound';
 import { Result } from '../../common/result';
+import { Room as PrismaRoom } from '@prisma/client';
 import { Message } from '../domain/message';
 import { MessageMapper } from '../mapper/message_mapper';
-import { RoomMapper } from '../mapper/room_mapper';
+// import { RoomMapper } from '../mapper/room_mapper';
 
 @Injectable()
 export class PrismaRoomsRepository implements RoomsRepository {
   constructor(
-    private prisma: PrismaService,
-    private roomMapper: RoomMapper,
+    private prisma: PrismaService, // private roomMapper: RoomMapper,
     private messageMapper: MessageMapper,
   ) {}
 
@@ -27,18 +27,27 @@ export class PrismaRoomsRepository implements RoomsRepository {
 
     return {
       result: 'success',
-      value: await this.roomMapper.PrismaRoomToDomainRoom(room),
+      value: new Room(),
     };
   }
 
   async save(room: Room) {
-    const prismaRoom = await this.roomMapper.DomainRoomToPrismaRoom(room);
+    const prismaRoom = this.mapRoomToPrismaRoom(room);
 
     await this.prisma.room.upsert({
-      where: { id: prismaRoom.id },
+      where: { id: room.id },
       update: prismaRoom,
       create: prismaRoom,
     });
+  }
+  mapRoomToPrismaRoom(room: Room): PrismaRoom {
+    return {
+      id: room.id,
+      name: room.name,
+      createdAt: room.createdAt,
+      updatedAt: room.updatedAt,
+      createdBy: room.creatorId,
+    };
   }
 
   async updateUserRoom(userId: string, roomId: string) {

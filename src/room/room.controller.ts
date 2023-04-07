@@ -53,16 +53,16 @@ export class RoomsController {
     return null;
   }
 
-  @Post(':id/messages')
-  postMessage(
-    @Param('id') roomId: string,
-    @Body() message: MessageDto,
-    @GetUser() user: AuthUser,
-  ) {
-    const chatUser = this.mapToChatUser(user);
-
-    return this.roomsService.postMessage(roomId, message.content, chatUser);
-  }
+  // @Post(':id/messages')
+  // postMessage(
+  //   @Param('id') roomId: string,
+  //   @Body() message: MessageDto,
+  //   @GetUser() user: AuthUser,
+  // ) {
+  //   const chatUser = this.mapToChatUser(user);
+  //
+  //   return this.roomsService.postMessage(roomId, message.content, chatUser);
+  // }
 
   private mapToChatUser(user: AuthUser): ChatUser {
     return new ChatUser(user.id, user.username, user.username, user.roomId);
