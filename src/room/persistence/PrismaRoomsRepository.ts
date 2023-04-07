@@ -32,12 +32,21 @@ export class PrismaRoomsRepository implements RoomsRepository {
     });
   }
 
+  async updateUserRoom(userId: string, roomId: string) {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { roomId: roomId },
+    });
+  }
+
   private toDomainRoom(prismaRoom: PrismaRoom): Room {
     return {
       id: prismaRoom.id,
       name: prismaRoom.name,
       description: '',
       creatorId: undefined,
+      createdAt: prismaRoom.createdAt,
+      updatedAt: prismaRoom.updatedAt,
     };
   }
 
@@ -45,8 +54,8 @@ export class PrismaRoomsRepository implements RoomsRepository {
     return {
       id: room.id,
       name: room.name,
-      createdAt: undefined,
-      updatedAt: undefined,
+      createdAt: room.createdAt,
+      updatedAt: room.updatedAt,
     };
   }
 }
