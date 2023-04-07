@@ -7,12 +7,13 @@ import { Result } from '../../common/result';
 import { Room as PrismaRoom } from '@prisma/client';
 import { Message } from '../domain/message';
 import { MessageMapper } from '../mapper/message_mapper';
-// import { RoomMapper } from '../mapper/room_mapper';
+import { RoomMapper } from '../mapper/room_mapper';
 
 @Injectable()
 export class PrismaRoomsRepository implements RoomsRepository {
   constructor(
-    private prisma: PrismaService, // private roomMapper: RoomMapper,
+    private prisma: PrismaService,
+    private roomMapper: RoomMapper,
     private messageMapper: MessageMapper,
   ) {}
 
@@ -27,7 +28,7 @@ export class PrismaRoomsRepository implements RoomsRepository {
 
     return {
       result: 'success',
-      value: new Room(),
+      value: await this.roomMapper.PrismaRoomToDomainRoom(room),
     };
   }
 
