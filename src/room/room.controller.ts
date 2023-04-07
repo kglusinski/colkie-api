@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CreateRoomDto } from './dto/room.dto';
-import { CreateRoomService } from './service/create_room.service';
+import { RoomService } from './service/room.service';
 import { JwtGuard } from '../auth/guard/jwt_guard';
 import { GetUser } from '../auth/decorator/GetUser';
 import { ChatUser } from './domain/chat_user';
@@ -18,7 +18,7 @@ import { MessageDto } from './dto/message.dto';
 @UseGuards(JwtGuard)
 @Controller('rooms')
 export class RoomsController {
-  constructor(private readonly roomsService: CreateRoomService) {}
+  constructor(private readonly roomsService: RoomService) {}
 
   @Post()
   async create(@Body() createRoomDto: CreateRoomDto, @GetUser() user) {

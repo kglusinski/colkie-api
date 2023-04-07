@@ -9,7 +9,7 @@ import { v4 as uuid } from 'uuid';
 const RoomsRepository = Inject('RoomsRepository');
 
 @Injectable()
-export class CreateRoomService {
+export class RoomService {
   constructor(
     @RoomsRepository private readonly roomsRepository: RoomsRepository,
   ) {}
