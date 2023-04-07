@@ -26,9 +26,9 @@ export class ChatUser {
     return this.role === 'ARTIST';
   }
 
-  public joinRoom(roomId: string): void {
+  joinRoom(roomId: string): void {
     if (this.roomId) {
-      throw new Error('Chat_user already in a room');
+      throw new Error('User already in a room');
     }
 
     this.roomId = roomId;
@@ -36,7 +36,7 @@ export class ChatUser {
 
   leaveRoom() {
     if (!this.roomId) {
-      throw new Error('Chat_user not in a room');
+      throw new Error('User not in a room');
     }
 
     this.roomId = undefined;

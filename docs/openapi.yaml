@@ -56,7 +56,7 @@ paths:
                 $ref: "#/components/schemas/room"
   /v1/rooms/{room_id}/users:
     post:
-      summary: Add a chat_user.ts to a room
+      summary: Add a user to a room
       operationId: join_room
       parameters:
         - in: path
@@ -66,8 +66,21 @@ paths:
           required: true
           description: ID of the room to add the chat_user.ts
       responses:
-        '201':
-          description: Chat_user added to the room successfully
+        '204':
+          description: User added to the room successfully
+    delete:
+      summary: Remove a user from a room
+      operationId: join_room
+      parameters:
+        - in: path
+          name: room_id
+          schema:
+            type: string
+          required: true
+          description: ID of the room to add the chat_user.ts
+      responses:
+        '204':
+          description: User added to the room successfully
   /v1/rooms/{room_id}/messages:
     post:
       summary: Send a message to a room

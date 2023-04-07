@@ -37,9 +37,15 @@ export class CreateRoomService {
     const res = await this.roomsRepository.findOne({ id: roomId });
 
     if (res.result === 'error') {
-      throw new Error('Room not found');
+      await Promise.reject(new Error('Room not found'));
     }
 
     return this.roomsRepository.updateUserRoom(user.getId(), roomId);
+  }
+
+  async leave(roomId: string, user: ChatUser) {
+    user.leaveRoom();
+
+    return this.roomsRepository.updateUserRoom(user.getId(), null);
   }
 }
