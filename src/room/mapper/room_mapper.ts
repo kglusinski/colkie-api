@@ -1,10 +1,8 @@
 import { Room as PrismaRoom } from '@prisma/client';
 import { Room } from '../domain/room.entity';
 import { RoomsRepository } from '../domain/rooms_repository';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-
-// const RoomsRepository = Inject('RoomsRepository');
 
 @Injectable()
 export class RoomMapper {
@@ -17,15 +15,15 @@ export class RoomMapper {
   }
 
   async PrismaRoomToDomainRoom(prismaRoom: PrismaRoom): Promise<Room> {
-    // const messages = await this.roomRepository.findMessagesByRoomId(
-    //   prismaRoom.id,
-    // );
+    const messages = await this.roomRepository.findMessagesByRoomId(
+      prismaRoom.id,
+    );
 
     const room = new Room(prismaRoom.id, prismaRoom.name, prismaRoom.createdBy);
     room.description = '';
     room.createdAt = prismaRoom.createdAt;
     room.updatedAt = prismaRoom.updatedAt;
-    room.messages = [];
+    room.messages = messages;
 
     return room;
   }
