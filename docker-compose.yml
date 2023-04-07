@@ -13,3 +13,14 @@ services:
     volumes:
       - ./database/bootstrap.sql:/docker-entrypoint-initdb.d/bootstrap.sql
     command: [ "postgres", "-c", "log_statement=all" ]
+  nestjs_app:
+    build: .
+    image: colkie-api
+    platform: linux/amd64
+    restart: always
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/colkie
+    depends_on:
+      - postgres
