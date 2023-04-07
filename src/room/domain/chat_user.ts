@@ -1,3 +1,5 @@
+import { Role } from '../../auth/domain/Role';
+
 export class ChatUser {
   constructor(
     private id: string,
@@ -23,7 +25,7 @@ export class ChatUser {
   }
 
   isArtist(): boolean {
-    return this.role === 'ARTIST';
+    return this.role === Role.ARTIST;
   }
 
   joinRoom(roomId: string): void {

@@ -33,6 +33,6 @@ export class UsersService {
       createUserDto.role,
     );
 
-    return this.repository.save(user);
+    return await this.repository.save(user);
   }
 }

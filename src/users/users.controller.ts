@@ -1,4 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  ConflictException,
+  Controller,
+  InternalServerErrorException,
+  Post,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -8,8 +15,11 @@ export class UsersController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    const user = await this.usersService.create(createUserDto);
-
-    return { id: user.id };
+    try {
+      const user = await this.usersService.create(createUserDto);
+      return { id: user.id };
+    } catch (e) {
+      throw new BadRequestException('Bad request');
+    }
   }
 }

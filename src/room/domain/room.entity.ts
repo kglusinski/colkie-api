@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import { ChatUser } from './chat_user';
 import { Message } from './message';
 
@@ -11,8 +10,11 @@ export class Room {
   updatedAt?: Date;
   messages: Message[] = [];
 
-  constructor() {
-    this.id = uuid();
+  constructor(id: string, name: string, creatorId: string) {
+    this.id = id;
+    this.name = name;
+    this.creatorId = creatorId;
+    this.createdAt = new Date();
   }
 
   postMessage(message: Message, chatUser: ChatUser) {

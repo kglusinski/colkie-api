@@ -17,7 +17,7 @@ export class PrismaRoomsRepository implements RoomsRepository {
   ) {}
 
   async findOne(predicates: object): Promise<Result<Room, RoomNotFound>> {
-    const room = await this.prisma.room.findUnique({
+    const room = await this.prisma.room.findFirst({
       where: predicates,
     });
 

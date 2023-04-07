@@ -4,6 +4,7 @@ import { Room } from '../domain/room.entity';
 import { RoomsRepository } from '../domain/rooms_repository';
 import { ChatUser } from '../domain/chat_user';
 import { Message } from '../domain/message';
+import { v4 as uuid } from 'uuid';
 
 const RoomsRepository = Inject('RoomsRepository');
 
@@ -15,13 +16,13 @@ export class CreateRoomService {
 
   async create(createRoomDto: CreateRoomDto, user: ChatUser): Promise<Room> {
     if (!user.isArtist()) {
+      console.log(user);
       throw new UnauthorizedException();
     }
 
     const { name } = createRoomDto;
-    const room = new Room();
-    room.name = name;
-    room.creatorId = user.getId();
+    const id = uuid();
+    const room = new Room(id, name, user.getId());
 
     try {
       this.roomsRepository.save(room);

@@ -22,17 +22,18 @@ export class RoomsController {
 
   @Post()
   async create(@Body() createRoomDto: CreateRoomDto, @GetUser() user) {
-    return await this.roomsService.create(createRoomDto, user);
+    const chatUser = this.mapToChatUser(user);
+    return await this.roomsService.create(createRoomDto, chatUser);
   }
 
   @Post(':id/users')
   @HttpCode(204)
   async join(@Param('id') roomId: string, @GetUser() user: AuthUser) {
     const chatUser = this.mapToChatUser(user);
-
     try {
       await this.roomsService.join(roomId, chatUser);
     } catch (e) {
+      console.error(e);
       throw new BadRequestException(e.message);
     }
 
@@ -65,6 +66,6 @@ export class RoomsController {
   // }
 
   private mapToChatUser(user: AuthUser): ChatUser {
-    return new ChatUser(user.id, user.username, user.username, user.roomId);
+    return new ChatUser(user.id, user.username, user.role, user.roomId);
   }
 }
