@@ -58,7 +58,7 @@ export class CreateRoomService {
       throw new Error('Room not found');
     }
     const room = res.value;
-    const message = new Message(content, chatUser);
+    const message = new Message(content, room.id, chatUser);
 
     room.postMessage(message, chatUser);
 

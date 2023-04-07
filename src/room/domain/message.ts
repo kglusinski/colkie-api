@@ -8,9 +8,10 @@ export class Message {
   updatedAt?: Date;
   roomId: string;
 
-  constructor(content: string, author: ChatUser) {
+  constructor(content: string, roomId: string, author: ChatUser) {
     this.content = content;
     this.author = author;
+    this.roomId = roomId;
     this.createdAt = new Date();
   }
 }

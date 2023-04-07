@@ -20,12 +20,12 @@ export class MessageMapper {
 
     const message = new Message(
       prismaMessage.content,
+      prismaMessage.roomId,
       this.userToChatUser(user),
     );
     message.id = prismaMessage.id;
     message.createdAt = prismaMessage.createdAt;
     message.updatedAt = prismaMessage.updatedAt;
-    message.roomId = prismaMessage.roomId;
 
     return message;
   }

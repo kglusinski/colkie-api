@@ -40,6 +40,12 @@ export class PrismaRoomsRepository implements RoomsRepository {
       update: prismaRoom,
       create: prismaRoom,
     });
+
+    await this.prisma.message.createMany({
+      data: room.messages.map((message) => {
+        return this.messageMapper.DomainMessageToPrismaMessage(message);
+      }),
+    });
   }
   mapRoomToPrismaRoom(room: Room): PrismaRoom {
     return {
